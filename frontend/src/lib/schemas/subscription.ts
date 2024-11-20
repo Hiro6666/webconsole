@@ -241,7 +241,7 @@ export const accessAndMobilitySubscriptionDataSchema = z.object({
 });
 
 export const authenticationSubscriptionSchema = z.object({
-  authenticationMethod: z.enum(["5G_AKA", "EAP_AKA_PRIME"]),
+  authenticationMethod: z.enum(["5G_AKA", "EAP_AKA_PRIME", "WAGF"]),
   permanentKey: permanentKeySchema,
   sequenceNumber: z.string().regex(/^[A-Fa-f0-9]{12}$/), // 48 bit hex string
   authenticationManagementField: z.string().regex(/^[A-Fa-f0-9]{4}$/), // 16 bit hex string

@@ -15,7 +15,7 @@ import { DEFAULT_5QI } from "../const";
 
 export const subscriberAuthDTOSchema = z.object({
   authenticationManagementField: z.string().regex(/^[A-Fa-f0-9]{4}$/), // 16 bit hex string
-  authenticationMethod: z.enum(["5G_AKA", "EAP_AKA_PRIME"]),
+  authenticationMethod: z.enum(["5G_AKA", "EAP_AKA_PRIME", "WAGF"]),
   sequenceNumber: z.string().regex(/^[A-Fa-f0-9]{12}$/), // 48 bit hex string
   permanentKey: z.string(),
   operatorCodeType: z.enum(["OP", "OPc"]),
@@ -91,7 +91,7 @@ export const DnnConfigurationDTOSchema = z.object({
   enableStaticIpv4Address: z.boolean(),
   staticIpv4Address: z.string().optional(),
   flowRules: z.array(flowRulesDTOSchema),
-  upSecurity: upSecurityDTOSchema.optional(), 
+  upSecurity: upSecurityDTOSchema.optional(),
 })
 
 interface DnnConfigurationDTO {
@@ -243,7 +243,7 @@ interface SubscriptionMapper {
 }
 
 class SubscriptionMapperImpl implements SubscriptionMapper {
-  constructor(private readonly flowsBuilder: FlowsMapper) {}
+  constructor(private readonly flowsBuilder: FlowsMapper) { }
 
   mapFromDto(subscription: SubscriptionDTO): Subscription {
     const flows = this.flowsBuilder.map(subscription);
@@ -421,12 +421,12 @@ class SubscriptionMapperImpl implements SubscriptionMapper {
       milenage:
         data.operatorCodeType === "OP"
           ? {
-              op: {
-                opValue: data.operatorCode,
-                encryptionKey: 0,
-                encryptionAlgorithm: 0,
-              },
-            }
+            op: {
+              opValue: data.operatorCode,
+              encryptionKey: 0,
+              encryptionAlgorithm: 0,
+            },
+          }
           : { op: { opValue: "", encryptionKey: 0, encryptionAlgorithm: 0 } },
       opc:
         data.operatorCodeType === "OPc"
